@@ -107,47 +107,47 @@
     }
 
     
-    function clickPrint(){
-      alert('11');
-      console.log(array);
-      return false;
-      // progress.hidden = false;
-      if (printCharacteristic == null) {
-        navigator.bluetooth
-          .requestDevice({
-            filters: [
-              {
-                services: ['000018f0-0000-1000-8000-00805f9b34fb'],
-              },
-            ],
-          })
-          .then((device) => {
-            console.log('> Found ' + device.name);
-            console.log('Connecting to GATT Server...');
-            return device.gatt.connect();
-          })
-          .then((server) =>
-            server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb')
-          )
-          .then((service) =>
-            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb')
-          )
-          .then((characteristic) => {
-            // Cache the characteristic
-            printCharacteristic = characteristic;
-            // sendPrinterData();
-            return printCharacteristic.writeValue(array).then(() => {
-        console.log('Write done.');
-      });
-          })
-          // .catch(handleError);
-      } else {
-        // sendPrinterData();
-        return printCharacteristic.writeValue(array).then(() => {
-        console.log('Write done.');
-        });
-      }
-    };
+    // function clickPrint(){
+    //   alert('11');
+    //   // console.log(array);
+    //   // return false;
+    //   // progress.hidden = false;
+    //   if (printCharacteristic == null) {
+    //     navigator.bluetooth
+    //       .requestDevice({
+    //         filters: [
+    //           {
+    //             services: ['000018f0-0000-1000-8000-00805f9b34fb'],
+    //           },
+    //         ],
+    //       })
+    //       .then((device) => {
+    //         console.log('> Found ' + device.name);
+    //         console.log('Connecting to GATT Server...');
+    //         return device.gatt.connect();
+    //       })
+    //       .then((server) =>
+    //         server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb')
+    //       )
+    //       .then((service) =>
+    //         service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb')
+    //       )
+    //       .then((characteristic) => {
+    //         // Cache the characteristic
+    //         printCharacteristic = characteristic;
+    //         // sendPrinterData();
+    //         return printCharacteristic.writeValue(array).then(() => {
+    //     console.log('Write done.');
+    //   });
+    //       })
+    //       // .catch(handleError);
+    //   } else {
+    //     // sendPrinterData();
+    //     return printCharacteristic.writeValue(array).then(() => {
+    //     console.log('Write done.');
+    //     });
+    //   }
+    // };
 
   </script>
 </html>
