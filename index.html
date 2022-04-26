@@ -42,9 +42,10 @@
     ></canvas>
   </body>
   <script>
+        let printCharacteristic;
     function clickPrint(){
       alert('11');
-      progress.hidden = false;
+      // progress.hidden = false;
       if (printCharacteristic == null) {
         navigator.bluetooth
           .requestDevice({
