@@ -1,5 +1,6 @@
-$(function () {
-  var array;
+var array;
+$(
+  function () {
   var image = document.getElementById('divs');
   domtoimage.toPng(image).then(function (dataUrl) {
     console.log(dataUrl);
