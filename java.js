@@ -84,11 +84,15 @@ $(
           // Cache the characteristic
           printCharacteristic = characteristic;
           // sendPrinterData();
-          console.log(array);
+          return printCharacteristic.writeValue(array).then(() => {
+            console.log('Write done.');
+          });
         })
         // .catch(handleError);
     } else {
-      console.log(array);
+      return printCharacteristic.writeValue(array).then(() => {
+        console.log('Write done.');
+      });
       // sendPrinterData();
     }
   };
