@@ -1,4 +1,5 @@
 $(function () {
+  var array;
   var image = document.getElementById('divs');
   domtoimage.toPng(image).then(function (dataUrl) {
     console.log(dataUrl);
@@ -15,7 +16,7 @@ $(function () {
       var img = document.getElementById("image");
       ctx.drawImage(img, 0, 0);
       var imgData = ctx.getImageData(0, 0, width, height);
-      var array = new Uint8Array(imgData.data);
+      array = new Uint8Array(imgData.data);
       console.log(array);
       // console.log(imgData.data);
     }
@@ -54,4 +55,43 @@ $(function () {
   //   // width: 200,
   //   // height: 200,
   // });
+  let printCharacteristic;
+  function clickPrint(){
+    alert('11');
+    // progress.hidden = false;
+    if (printCharacteristic == null) {
+      navigator.bluetooth
+        .requestDevice({
+          filters: [
+            {
+              services: ['000018f0-0000-1000-8000-00805f9b34fb'],
+            },
+          ],
+        })
+        .then((device) => {
+          console.log('> Found ' + device.name);
+          console.log('Connecting to GATT Server...');
+          return device.gatt.connect();
+        })
+        .then((server) =>
+          server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb')
+        )
+        .then((service) =>
+          service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb')
+        )
+        .then((characteristic) => {
+          // Cache the characteristic
+          printCharacteristic = characteristic;
+          // sendPrinterData();
+          console.log(array);
+        })
+        // .catch(handleError);
+    } else {
+      console.log(array);
+      // sendPrinterData();
+    }
+  };
+
 });
+
+
