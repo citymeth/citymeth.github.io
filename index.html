@@ -42,9 +42,75 @@
     ></canvas>
   </body>
   <script>
-        let printCharacteristic;
+    let printCharacteristic;
+    function sendNextImageDataBatch(resolve, reject) {
+      // Can only write 512 bytes at a time to the characteristic
+      // Need to send the image data in 512 byte batches
+      if (index + 512 < data.length) {
+        printCharacteristic
+          .writeValue(data.slice(index, index + 512))
+          .then(() => {
+            index += 512;
+            sendNextImageDataBatch(resolve, reject);
+          })
+          .catch((error) => reject(error));
+      } else {
+        // Send the last bytes
+        if (index < data.length) {
+          printCharacteristic
+            .writeValue(data.slice(index, data.length))
+            .then(() => {
+              resolve();
+            })
+            .catch((error) => reject(error));
+        } else {
+          resolve();
+        }
+      }
+    }
+
+    function sendTextData() {
+      // Get the bytes for the text
+      let encoder = new TextEncoder('utf-8');
+      // Add line feed + carriage return chars to text
+      let text = encoder.encode('\u1791\u17c5' + '\u000A\u000D');
+      let test = {
+        0: 104,
+        1: 101,
+        2: 108,
+        3: 108,
+        4: 111,
+        5: 10,
+        6: 13,
+      };
+      // alert(test);
+      return printCharacteristic.writeValue(text).then(() => {
+        console.log('Write done.');
+      });
+    }
+
+    function sendImageData() {
+      index = 0;
+      data = getImagePrintData();
+      return new Promise(function (resolve, reject) {
+        sendNextImageDataBatch(resolve, reject);
+      });
+    }
+
+    function sendPrinterData() {
+      // Print an image followed by the text
+      sendTextData()
+        .then(() => {
+          progress.hidden = true;
+        })
+        .catch(handleError);
+    }
+
+    
     function clickPrint(){
       alert('11');
+      console.log(array);
+      return false;
       // progress.hidden = false;
       if (printCharacteristic == null) {
         navigator.bluetooth
@@ -69,11 +135,17 @@
           .then((characteristic) => {
             // Cache the characteristic
             printCharacteristic = characteristic;
-            sendPrinterData();
+            // sendPrinterData();
+            return printCharacteristic.writeValue(array).then(() => {
+        console.log('Write done.');
+      });
           })
           // .catch(handleError);
       } else {
-        sendPrinterData();
+        // sendPrinterData();
+        return printCharacteristic.writeValue(array).then(() => {
+        console.log('Write done.');
+        });
       }
     };
 
