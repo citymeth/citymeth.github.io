@@ -1,42 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<link rel="stylesheet" href="style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
-<script src="java.js"></script>
-<body>
-  <b>My HTML Code</b><br>
-  <div id="divs" ><br><p>ទីនេះ</p></div>
-<div id="MyHTMLCODE">
-<div class="container">
-    <div class="header">
-        Header
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
+  <script src="java.js"></script>
+  <body>
+    <b>My HTML Code</b><br />
+    <div id="divs">
+      <br />
+      <p>ទីនេះ</p>
     </div>
-    <div class="mainbody">
-    My Main Body
-       <section>
-    <div id="one"> <b>ទីនេះ</b> </div>
-    <div id="two"> <b>Second</b> </div>
-</section>
+    <div id="MyHTMLCODE">
+      <div class="container">
+        <div class="header">Header</div>
+        <div class="mainbody">
+          My Main Body
+          <section>
+            <div id="one"><b>ទីនេះ</b></div>
+            <div id="two"><b>Second</b></div>
+          </section>
 
-<button>print</button>
+          <button id="print" onclick="clickPrint()">print</button>
+        </div>
+        <div class="footer">Footer</div>
+      </div>
     </div>
-    <div class="footer">
-        Footer
-    </div>
-</div>
-</div>
 
+    <br /><b> My Convert Canvas</b><br />
+    <canvas
+      id="myCanvas"
+      style="border: 2px solid black"
+      width="50"
+      height="50"
+    ></canvas>
+  </body>
+  <script>
+    function clickPrint(){
+      alert('11');
+      progress.hidden = false;
+      if (printCharacteristic == null) {
+        navigator.bluetooth
+          .requestDevice({
+            filters: [
+              {
+                services: ['000018f0-0000-1000-8000-00805f9b34fb'],
+              },
+            ],
+          })
+          .then((device) => {
+            console.log('> Found ' + device.name);
+            console.log('Connecting to GATT Server...');
+            return device.gatt.connect();
+          })
+          .then((server) =>
+            server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb')
+          )
+          .then((service) =>
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb')
+          )
+          .then((characteristic) => {
+            // Cache the characteristic
+            printCharacteristic = characteristic;
+            sendPrinterData();
+          })
+          .catch(handleError);
+      } else {
+        sendPrinterData();
+      }
+    };
 
-<br><b> My Convert Canvas</b><br>
-<canvas id="myCanvas" style="border:2px solid black;" width="50" height="50"></canvas>
-</body>
+  </script>
 </html>
-
