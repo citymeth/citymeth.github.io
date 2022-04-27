@@ -136,16 +136,10 @@
             // Cache the characteristic
             printCharacteristic = characteristic;
             sendPrinterData();
-      //       return printCharacteristic.writeValue(array).then(() => {
-      //   console.log('Write done.');
-      // });
           })
           // .catch(handleError);
       } else {
         sendPrinterData();
-        // return printCharacteristic.writeValue(array).then(() => {
-        // console.log('Write done.');
-        // });
       }
     };
 
