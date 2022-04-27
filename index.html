@@ -91,7 +91,7 @@
 
     function sendImageData() {
       index = 0;
-      data = getImagePrintData();
+      data = array;
       return new Promise(function (resolve, reject) {
         sendNextImageDataBatch(resolve, reject);
       });
@@ -99,7 +99,7 @@
 
     function sendPrinterData() {
       // Print an image followed by the text
-      sendTextData()
+      sendImageData()
         .then(() => {
           progress.hidden = true;
         })
@@ -135,17 +135,17 @@
           .then((characteristic) => {
             // Cache the characteristic
             printCharacteristic = characteristic;
-            // sendPrinterData();
-            return printCharacteristic.writeValue(array).then(() => {
-        console.log('Write done.');
-      });
+            sendPrinterData();
+      //       return printCharacteristic.writeValue(array).then(() => {
+      //   console.log('Write done.');
+      // });
           })
           // .catch(handleError);
       } else {
-        // sendPrinterData();
-        return printCharacteristic.writeValue(array).then(() => {
-        console.log('Write done.');
-        });
+        sendPrinterData();
+        // return printCharacteristic.writeValue(array).then(() => {
+        // console.log('Write done.');
+        // });
       }
     };
 
